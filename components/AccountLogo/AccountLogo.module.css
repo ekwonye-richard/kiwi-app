@@ -1,0 +1,58 @@
+.logoRoot {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.logo,
+.logoAsset,
+.logoFallback {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background-color: var(--light-grey-alt);
+  color: var(--grey);
+  filter: grayscale(1);
+}
+
+.logo img {
+  width: 18px;
+  height: 18px;
+  object-fit: cover;
+}
+
+.logoAsset svg {
+  width: 18px;
+  height: 18px;
+}
+
+.logoFallback {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--black);
+  background-color: var(--light-grey);
+}
+
+.small {
+  width: 20px;
+  height: 20px;
+
+  .logo,
+  .logoAsset,
+  .logoFallback {
+    width: 20px;
+    height: 20px;
+  }
+
+  .logo img,
+  .logoAsset svg {
+    width: 12px;
+    height: 12px;
+  }
+}

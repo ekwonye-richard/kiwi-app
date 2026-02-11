@@ -1,12 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
 import {
   type TrueLayerAccountAccountNumber,
   type TrueLayerProvider,
 } from "@/services";
 import styles from "./AccountCheckboxCard.module.css";
 import classNames from "classnames";
-import { resolveProviderLogoAsset } from "../AccountLogoList";
+import AccountLogo from "../AccountLogo";
 
 type AccountCheckboxCardProps = {
   accountType: string;
@@ -27,40 +25,9 @@ const AccountCheckboxCard = ({
   checked,
   onCheckedChange,
 }: AccountCheckboxCardProps) => {
-  const [hasLogoError, setHasLogoError] = useState(false);
-  const providerName = provider?.display_name ?? "Provider";
-  const logoSrc = provider?.logo_uri?.trim();
-  const providerLogoAsset = resolveProviderLogoAsset(provider);
-  const shouldShowAssetLogo = Boolean(providerLogoAsset);
-  const shouldShowImageLogo = Boolean(
-    !shouldShowAssetLogo && logoSrc && !hasLogoError,
-  );
-  const shouldShowCharacterFallback =
-    !shouldShowAssetLogo && !shouldShowImageLogo;
-
   return (
     <label className={classNames(styles.card, { [styles.checked]: checked })}>
-      {shouldShowAssetLogo && (
-        <span className={styles.logoAsset} aria-hidden="true">
-          {providerLogoAsset}
-        </span>
-      )}
-
-      {shouldShowImageLogo && (
-        <span className={styles.logo} aria-hidden="true">
-          <img
-            src={logoSrc}
-            alt={`${providerName} logo`}
-            onError={() => setHasLogoError(true)}
-          />
-        </span>
-      )}
-
-      {shouldShowCharacterFallback && (
-        <span className={styles.logoFallback} aria-hidden="true">
-          {providerName[0]?.toUpperCase() ?? "?"}
-        </span>
-      )}
+      <AccountLogo provider={provider} />
       <div className={styles.accountInfo}>
         <h4 className={styles.accountName}>{displayName}</h4>
         <div className={styles.accountDetails}>

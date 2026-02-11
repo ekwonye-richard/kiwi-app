@@ -1,0 +1,11 @@
+.heading {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--grey);
+  margin-bottom: 6px;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+}

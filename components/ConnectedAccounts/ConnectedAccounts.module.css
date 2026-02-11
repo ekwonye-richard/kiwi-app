@@ -35,48 +35,6 @@
   margin-top: 40px;
 }
 
-.dateRangeFields {
-  display: grid;
-  gap: 16px;
-  grid: auto / 1fr 1fr;
-  margin-top: 12px;
-}
-
-.dateRangeField {
-  position: relative;
-  display: grid;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  color: var(--grey);
-}
-
-.dateRangeLabelText {
-  position: absolute;
-  left: 12px;
-}
-
-.dateRangeField select {
-  appearance: none;
-  width: 100%;
-  border: 1px solid var(--light-grey);
-  border-radius: 8px;
-  background-color: var(--white);
-  color: var(--black);
-  font-size: 14px;
-  padding: 10px 12px 10px 40px;
-  cursor: pointer;
-
-  &:focus {
-    outline: none;
-    border-color: var(--light-blue);
-  }
-}
-
-select.dateRangeFromSelect {
-  padding: 10px 12px 10px 54px;
-}
-
 .dashboardAction {
   margin-top: 40px;
   display: grid;

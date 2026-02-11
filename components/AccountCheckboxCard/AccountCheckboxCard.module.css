@@ -16,38 +16,6 @@
   opacity: 1;
 }
 
-.logo,
-.logoAsset,
-.logoFallback {
-  width: 28px;
-  height: 28px;
-  border-radius: 999px;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  background-color: var(--light-grey-alt);
-  color: var(--grey);
-  filter: grayscale(1);
-
-  img {
-    width: 18px;
-    height: 18px;
-    object-fit: cover;
-  }
-
-  svg {
-    width: 18px;
-    height: 18px;
-  }
-}
-
-.logoFallback {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--black);
-  background-color: var(--light-grey);
-}
-
 .accountInfo {
   display: grid;
   row-gap: 4px;

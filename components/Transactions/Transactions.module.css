@@ -1,0 +1,124 @@
+.wrapper {
+  margin: 38px 0 80px;
+  min-height: 80vh;
+}
+
+.header {
+  display: grid;
+  row-gap: 8px;
+  margin-bottom: 14px;
+}
+
+.controlsRow {
+  display: grid;
+  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+  align-items: start;
+  gap: 14px;
+}
+
+.filterInputs {
+  margin-top: 12px;
+  display: grid;
+  row-gap: 8px;
+}
+
+.accountField {
+  position: relative;
+  display: grid;
+}
+
+.accountLabelText {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: var(--grey);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  border: 1px solid var(--light-grey);
+  border-radius: 8px;
+  background-color: var(--white);
+  color: var(--black);
+  font-size: 14px;
+  padding: 10px 12px;
+
+  &:focus {
+    outline: none;
+    border-color: var(--light-blue);
+  }
+}
+
+.accountSelect {
+  width: 100%;
+  border: 1px solid var(--light-grey);
+  border-radius: 8px;
+  background-color: var(--white);
+  color: var(--black);
+  font-size: 14px;
+  padding: 11px 12px 10px 78px;
+  appearance: none;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: var(--light-blue);
+  }
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 550;
+  margin-bottom: 0;
+}
+
+.totalsRow {
+  margin-top: 24px;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.totalItem {
+  /* border: 1px solid var(--light-grey-alt); */
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: grid;
+  row-gap: 4px;
+}
+
+.totalLabel {
+  font-size: 14px;
+  color: var(--grey);
+}
+
+.totalValue {
+  font-size: 20px;
+  font-weight: 600;
+  font-family: var(--font-rajdhani), system-ui, sans-serif;
+}
+
+.amountDivider {
+  display: inline-block;
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--light-grey);
+  transform: translateY(0.07em);
+  margin: 0 0.1em;
+}
+
+.groups {
+  display: grid;
+  row-gap: 54px;
+  border: 1px solid var(--light-grey-alt);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.empty {
+  color: var(--grey);
+  font-size: 14px;
+}

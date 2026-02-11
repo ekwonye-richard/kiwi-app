@@ -9,6 +9,7 @@ import Card from "../Card";
 import classNames from "classnames";
 import Button from "../Button";
 import AccountLogosList from "../AccountLogoList";
+import Transactions from "../Transactions";
 
 export type DashboardAccountData = {
   account: TrueLayerAccount;
@@ -114,14 +115,20 @@ const Dashboard = ({ accounts, dateRange }: DashboardProps) => {
       return false;
     }
 
-    return accountData.transactions.some((transaction) => transaction.amount > 0);
+    return accountData.transactions.some(
+      (transaction) => transaction.amount > 0,
+    );
   });
 
   const balanceTotalsByCurrency = new Map<string, number>();
   balanceAccounts.forEach((accountData) => {
-    const currency = accountData.balance?.currency ?? accountData.account.currency;
+    const currency =
+      accountData.balance?.currency ?? accountData.account.currency;
     const currentTotal = balanceTotalsByCurrency.get(currency) ?? 0;
-    balanceTotalsByCurrency.set(currency, currentTotal + getBalanceValue(accountData));
+    balanceTotalsByCurrency.set(
+      currency,
+      currentTotal + getBalanceValue(accountData),
+    );
   });
 
   const incomeTotalsByCurrency = new Map<string, number>();
@@ -153,9 +160,15 @@ const Dashboard = ({ accounts, dateRange }: DashboardProps) => {
     });
   });
 
-  const positiveBalanceTotals = getPositiveTotalsByCurrency(balanceTotalsByCurrency);
-  const positiveIncomeTotals = getPositiveTotalsByCurrency(incomeTotalsByCurrency);
-  const positiveExpenseTotals = getPositiveTotalsByCurrency(expenseTotalsByCurrency);
+  const positiveBalanceTotals = getPositiveTotalsByCurrency(
+    balanceTotalsByCurrency,
+  );
+  const positiveIncomeTotals = getPositiveTotalsByCurrency(
+    incomeTotalsByCurrency,
+  );
+  const positiveExpenseTotals = getPositiveTotalsByCurrency(
+    expenseTotalsByCurrency,
+  );
 
   return (
     <main className={styles.dashboard}>
@@ -181,19 +194,25 @@ const Dashboard = ({ accounts, dateRange }: DashboardProps) => {
           className={styles.cardTotalBalance}
           footer={
             <AccountLogosList
-              providers={balanceAccounts.map((account) => account.account.provider)}
+              providers={balanceAccounts.map(
+                (account) => account.account.provider,
+              )}
             />
           }
         >
           {positiveBalanceTotals.length === 0 ? (
             <div>
-              <span className={styles.amountLarge}>{formatCurrency(0, "GBP")}</span>
+              <span className={styles.amountLarge}>
+                {formatCurrency(0, "GBP")}
+              </span>
             </div>
           ) : (
             positiveBalanceTotals.map(([currency, totalBalance], index) => (
               <div key={currency}>
                 <div>
-                  {index > 0 && <span className={styles.amountDivider}> / </span>}
+                  {index > 0 && (
+                    <span className={styles.amountDivider}> / </span>
+                  )}
                   <span
                     className={classNames({
                       [styles.amountLarge]: index === 0,
@@ -212,19 +231,25 @@ const Dashboard = ({ accounts, dateRange }: DashboardProps) => {
           title="Total Income"
           footer={
             <AccountLogosList
-              providers={incomeAccounts.map((account) => account.account.provider)}
+              providers={incomeAccounts.map(
+                (account) => account.account.provider,
+              )}
             />
           }
         >
           {positiveIncomeTotals.length === 0 ? (
             <div>
-              <span className={styles.amountMedium}>{formatCurrency(0, "GBP")}</span>
+              <span className={styles.amountMedium}>
+                {formatCurrency(0, "GBP")}
+              </span>
             </div>
           ) : (
             positiveIncomeTotals.map(([currency, totalIncome], index) => (
               <div key={currency}>
                 <div>
-                  {index > 0 && <span className={styles.amountDivider}> / </span>}
+                  {index > 0 && (
+                    <span className={styles.amountDivider}> / </span>
+                  )}
                   <span
                     className={classNames({
                       [styles.amountMedium]: index === 0,
@@ -237,25 +262,34 @@ const Dashboard = ({ accounts, dateRange }: DashboardProps) => {
               </div>
             ))
           )}
+          <small className={styles.cardNote}>
+            Aggregated from income accounts
+          </small>
         </Card>
         <Card
           title="Total Expenses"
           className={styles.cardExpenses}
           footer={
             <AccountLogosList
-              providers={expenseAccounts.map((account) => account.account.provider)}
+              providers={expenseAccounts.map(
+                (account) => account.account.provider,
+              )}
             />
           }
         >
           {positiveExpenseTotals.length === 0 ? (
             <div>
-              <span className={styles.amountMedium}>{formatCurrency(0, "GBP")}</span>
+              <span className={styles.amountMedium}>
+                {formatCurrency(0, "GBP")}
+              </span>
             </div>
           ) : (
             positiveExpenseTotals.map(([currency, totalExpenses], index) => (
               <div key={currency}>
                 <div>
-                  {index > 0 && <span className={styles.amountDivider}> / </span>}
+                  {index > 0 && (
+                    <span className={styles.amountDivider}> / </span>
+                  )}
                   <span
                     className={classNames({
                       [styles.amountMedium]: index === 0,
@@ -269,6 +303,10 @@ const Dashboard = ({ accounts, dateRange }: DashboardProps) => {
             ))
           )}
         </Card>
+      </section>
+
+      <section className={styles.transactionsSection}>
+        <Transactions accounts={accounts} dateRange={dateRange} />
       </section>
     </main>
   );

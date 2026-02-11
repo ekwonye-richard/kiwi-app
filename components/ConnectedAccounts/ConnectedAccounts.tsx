@@ -7,6 +7,7 @@ import type { TrueLayerAccount } from "@/services";
 import styles from "./ConnectedAccounts.module.css";
 import Button from "../Button";
 import { TrueLayerLogo } from "@/vectors";
+import MonthRangeSelect, { type MonthOption } from "../MonthRangeSelect";
 
 type ConnectedAccountsProps = {
   accounts: TrueLayerAccount[];
@@ -74,7 +75,7 @@ function formatMonthInputValue(date: Date) {
 
 function buildMonthOptions(monthCount: number) {
   const now = new Date();
-  const options: { value: string; label: string }[] = [];
+  const options: MonthOption[] = [];
 
   for (let index = 0; index < monthCount; index += 1) {
     const date = new Date(now.getFullYear(), now.getMonth() - index, 1);
@@ -146,20 +147,6 @@ const ConnectedAccounts = ({
       JSON.stringify(combinedAccounts),
     );
     window.location.href = "/api/truelayer/connect";
-  };
-
-  const handleStartMonthChange = (nextStartMonth: string) => {
-    setStartMonth(nextStartMonth);
-    if (nextStartMonth > endMonth) {
-      setEndMonth(nextStartMonth);
-    }
-  };
-
-  const handleEndMonthChange = (nextEndMonth: string) => {
-    setEndMonth(nextEndMonth);
-    if (nextEndMonth < startMonth) {
-      setStartMonth(nextEndMonth);
-    }
   };
 
   const handleBuildDashboard = async () => {
@@ -265,35 +252,15 @@ const ConnectedAccounts = ({
 
       <div className={styles.dateRange}>
         <h6 className={styles.subtitle}>Date Range</h6>
-        <div className={styles.dateRangeFields}>
-          <label className={styles.dateRangeField}>
-            <span className={styles.dateRangeLabelText}>From</span>
-            <select
-              value={startMonth}
-              onChange={(event) => handleStartMonthChange(event.target.value)}
-              className={styles.dateRangeFromSelect}
-            >
-              {monthOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className={styles.dateRangeField}>
-            <span className={styles.dateRangeLabelText}>To</span>
-            <select
-              value={endMonth}
-              onChange={(event) => handleEndMonthChange(event.target.value)}
-            >
-              {monthOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
+        <MonthRangeSelect
+          fromMonth={startMonth}
+          toMonth={endMonth}
+          options={monthOptions}
+          onRangeChange={({ fromMonth, toMonth }) => {
+            setStartMonth(fromMonth);
+            setEndMonth(toMonth);
+          }}
+        />
       </div>
 
       {dashboardError ? <small>{dashboardError}</small> : null}
