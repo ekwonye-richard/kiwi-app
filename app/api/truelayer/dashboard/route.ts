@@ -18,6 +18,11 @@ type DashboardAccountData = {
 type RequestBody = {
   accessToken?: string;
   accounts?: TrueLayerAccount[];
+  accountContexts?: Array<{
+    accountId?: string;
+    accessToken?: string;
+    expiresIn?: number;
+  }>;
   incomeAccountIds?: string[];
   startMonth?: string;
   endMonth?: string;
@@ -60,9 +65,12 @@ function parseMonthRange({
   }
 
   const fromDate = new Date(Date.UTC(startYear, startMonthIndex, 1, 0, 0, 0));
-  const toDate = new Date(
+  const selectedToDate = new Date(
     Date.UTC(endYear, endMonthIndex + 1, 0, 23, 59, 59, 999),
   );
+  const now = new Date();
+  const toDate =
+    selectedToDate.getTime() > now.getTime() ? now : selectedToDate;
 
   if (fromDate.getTime() > toDate.getTime()) {
     return null;
@@ -78,12 +86,22 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as RequestBody;
     const accessToken = body.accessToken?.trim();
+    const accountContexts = body.accountContexts ?? [];
     const incomeAccountIds = body.incomeAccountIds ?? [];
     const accounts = body.accounts ?? [];
 
-    if (!accessToken) {
+    const tokenByAccountId = new Map<string, string>();
+    accountContexts.forEach((context) => {
+      const accountId = context.accountId?.trim();
+      const token = context.accessToken?.trim();
+      if (accountId && token) {
+        tokenByAccountId.set(accountId, token);
+      }
+    });
+
+    if (!accessToken && tokenByAccountId.size === 0) {
       return NextResponse.json(
-        { error: "Missing access token." },
+        { error: "Missing access token context." },
         { status: 400 },
       );
     }
@@ -105,13 +123,25 @@ export async function POST(request: Request) {
 
     const dashboardAccounts: DashboardAccountData[] = await Promise.all(
       accounts.map(async (account) => {
+        const tokenForAccount =
+          tokenByAccountId.get(account.account_id) ?? accessToken;
+        if (!tokenForAccount) {
+          return {
+            account,
+            balance: null,
+            transactions: [],
+            isIncomeAccount: incomeAccountIds.includes(account.account_id),
+            fetchError: "Missing account token context",
+          };
+        }
+
         const [balanceResult, transactionsResult] = await Promise.allSettled([
           getAccountBalance({
-            accessToken,
+            accessToken: tokenForAccount,
             accountId: account.account_id,
           }),
           getAccountTransactions({
-            accessToken,
+            accessToken: tokenForAccount,
             accountId: account.account_id,
             from: range.from,
             to: range.to,

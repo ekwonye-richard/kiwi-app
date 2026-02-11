@@ -71,7 +71,7 @@ const FooterAccountLogos = ({ providers }: FooterAccountLogosProps) => {
             className={styles.logoItem}
             style={
               {
-                "--logo-delay": `${1000 + index * 40}ms`,
+                "--logo-delay": `${300 + index * 40}ms`,
               } as CSSProperties
             }
           />

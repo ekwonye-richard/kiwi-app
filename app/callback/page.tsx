@@ -37,7 +37,8 @@ export default async function CallbackPage({
   }
 
   if (!params.code) {
-    return renderError("Missing authorization code in callback URL.");
+    // return renderError("Missing authorization code in callback URL.");
+    return renderError("");
   }
 
   if (!params.state || !expectedState || params.state !== expectedState) {

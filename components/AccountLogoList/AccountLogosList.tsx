@@ -25,11 +25,7 @@ const AccountLogosList = ({ providers }: AccountLogosListProps) => {
   return (
     <div className={styles.accountLogosList}>
       {visibleProviders.map((provider) => (
-        <AccountLogo
-          key={provider.provider_id}
-          provider={provider}
-          className={styles.logoItem}
-        />
+        <AccountLogo key={provider.provider_id} provider={provider} />
       ))}
     </div>
   );

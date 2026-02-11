@@ -11,14 +11,24 @@ import MonthRangeSelect, { type MonthOption } from "../MonthRangeSelect";
 
 type ConnectedAccountsProps = {
   accounts: TrueLayerAccount[];
-  accessToken: string;
-  expiresIn: number;
+  accessToken?: string;
+  expiresIn?: number;
   initialError?: string;
 };
 
 const CONNECTED_ACCOUNTS_STORAGE_KEY = "connected_accounts";
 const CONNECTED_ACCOUNTS_CONTEXT_STORAGE_KEY = "connected_accounts_context";
 const DASHBOARD_DATE_RANGE_STORAGE_KEY = "dashboard_date_range";
+
+export type AccountAccessContext = {
+  accountId: string;
+  accessToken: string;
+  expiresIn: number;
+};
+
+type StoredAccountsContext = {
+  accountContexts: AccountAccessContext[];
+};
 
 function mergeAccounts(
   existingAccounts: TrueLayerAccount[],
@@ -52,6 +62,55 @@ function getStoredAccounts(): TrueLayerAccount[] {
   } catch {
     return [];
   }
+}
+
+function parseStoredContext(raw: string | null): StoredAccountsContext {
+  if (!raw) {
+    return { accountContexts: [] };
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as
+      | StoredAccountsContext
+      | { accessToken?: string; expiresIn?: number };
+
+    if (
+      typeof parsed === "object" &&
+      parsed !== null &&
+      "accountContexts" in parsed &&
+      Array.isArray(parsed.accountContexts)
+    ) {
+      const accountContexts = parsed.accountContexts.filter((context) => {
+        return (
+          typeof context?.accountId === "string" &&
+          typeof context?.accessToken === "string" &&
+          typeof context?.expiresIn === "number"
+        );
+      });
+
+      return { accountContexts };
+    }
+  } catch {
+    return { accountContexts: [] };
+  }
+
+  return { accountContexts: [] };
+}
+
+function mergeAccountContexts(
+  existingContexts: AccountAccessContext[],
+  incomingContexts: AccountAccessContext[],
+) {
+  const contextByAccountId = new Map<string, AccountAccessContext>();
+
+  existingContexts.forEach((context) => {
+    contextByAccountId.set(context.accountId, context);
+  });
+  incomingContexts.forEach((context) => {
+    contextByAccountId.set(context.accountId, context);
+  });
+
+  return Array.from(contextByAccountId.values());
 }
 
 async function parseJsonSafely(response: Response) {
@@ -97,10 +156,33 @@ const ConnectedAccounts = ({
   initialError,
 }: ConnectedAccountsProps) => {
   const router = useRouter();
+  const incomingAccountContexts = useMemo(() => {
+    if (!accessToken || typeof expiresIn !== "number") {
+      return [] as AccountAccessContext[];
+    }
+
+    return accounts.map((account) => ({
+      accountId: account.account_id,
+      accessToken,
+      expiresIn,
+    }));
+  }, [accounts, accessToken, expiresIn]);
   const combinedAccounts = useMemo(
     () => mergeAccounts(getStoredAccounts(), accounts),
     [accounts],
   );
+  const combinedAccountContexts = useMemo(() => {
+    if (typeof window === "undefined") {
+      return incomingAccountContexts;
+    }
+
+    const raw = sessionStorage.getItem(CONNECTED_ACCOUNTS_CONTEXT_STORAGE_KEY);
+    const storedContext = parseStoredContext(raw);
+    return mergeAccountContexts(
+      storedContext.accountContexts,
+      incomingAccountContexts,
+    );
+  }, [incomingAccountContexts]);
   const monthOptions = useMemo(() => buildMonthOptions(24), []);
   const [incomeAccountIds, setIncomeAccountIds] = useState<Set<string>>(
     new Set(),
@@ -125,9 +207,9 @@ const ConnectedAccounts = ({
     );
     sessionStorage.setItem(
       CONNECTED_ACCOUNTS_CONTEXT_STORAGE_KEY,
-      JSON.stringify({ accessToken, expiresIn }),
+      JSON.stringify({ accountContexts: combinedAccountContexts }),
     );
-  }, [combinedAccounts, accessToken, expiresIn]);
+  }, [combinedAccounts, combinedAccountContexts]);
 
   const handleCheckedChange = (accountId: string, checked: boolean) => {
     setIncomeAccountIds((current) => {
@@ -176,8 +258,9 @@ const ConnectedAccounts = ({
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          accessToken,
+          accessToken: accessToken ?? undefined,
           accounts: combinedAccounts,
+          accountContexts: combinedAccountContexts,
           incomeAccountIds: selectedIncomeAccountIds,
           startMonth,
           endMonth,
@@ -212,7 +295,6 @@ const ConnectedAccounts = ({
           ? error.message
           : "Could not load dashboard data.",
       );
-    } finally {
       setIsLoadingDashboard(false);
     }
   };

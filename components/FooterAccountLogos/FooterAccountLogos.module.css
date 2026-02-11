@@ -18,9 +18,11 @@
 
 .isVisible {
   --items-y: 0px;
+  --spring-duration: 0.9546s;
 
   &:hover {
     --delay: 0s;
+    --spring-duration: 0.8546s;
   }
 }
 
@@ -70,7 +72,6 @@
     1.0014 85.94%,
     0.9999 99.94%
   );
-  --spring-duration: 0.9546s;
 
   transform: translateY(var(--items-y, 40px)) scale(1);
   transition: var(--spring-duration) var(--spring-easing)

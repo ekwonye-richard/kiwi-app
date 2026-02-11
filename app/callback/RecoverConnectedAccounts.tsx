@@ -3,14 +3,14 @@
 import ConnectedAccounts from "@/components/ConnectedAccounts";
 import ConnectionError from "@/components/ConnectionError";
 import type { TrueLayerAccount } from "@/services";
+import type { AccountAccessContext } from "@/components/ConnectedAccounts/ConnectedAccounts";
 
 type RecoverConnectedAccountsProps = {
   message: string;
 };
 
 type ConnectedAccountsContext = {
-  accessToken: string;
-  expiresIn: number;
+  accountContexts: AccountAccessContext[];
 };
 
 const CONNECTED_ACCOUNTS_STORAGE_KEY = "connected_accounts";
@@ -33,7 +33,9 @@ function getStoredAccounts(): TrueLayerAccount[] {
   }
 }
 
-function getStoredContext(): ConnectedAccountsContext | null {
+function getStoredContext(
+  accounts: TrueLayerAccount[],
+): ConnectedAccountsContext | null {
   if (typeof window === "undefined") {
     return null;
   }
@@ -45,18 +47,51 @@ function getStoredContext(): ConnectedAccountsContext | null {
 
   try {
     const parsed = JSON.parse(raw) as ConnectedAccountsContext;
-    if (!parsed.accessToken || typeof parsed.expiresIn !== "number") {
+    if (!Array.isArray(parsed.accountContexts)) {
       return null;
     }
-    return parsed;
+
+    const accountContexts = parsed.accountContexts.filter((context) => {
+      return (
+        typeof context?.accountId === "string" &&
+        typeof context?.accessToken === "string" &&
+        typeof context?.expiresIn === "number"
+      );
+    });
+
+    if (accountContexts.length === 0) {
+      return null;
+    }
+
+    return { accountContexts };
   } catch {
-    return null;
+    try {
+      // Backward compatibility for old stored shape:
+      // { accessToken, expiresIn }
+      const parsed = JSON.parse(raw) as {
+        accessToken?: string;
+        expiresIn?: number;
+      };
+      if (!parsed.accessToken || typeof parsed.expiresIn !== "number") {
+        return null;
+      }
+
+      return {
+        accountContexts: accounts.map((account) => ({
+          accountId: account.account_id,
+          accessToken: parsed.accessToken as string,
+          expiresIn: parsed.expiresIn as number,
+        })),
+      };
+    } catch {
+      return null;
+    }
   }
 }
 
 const RecoverConnectedAccounts = ({ message }: RecoverConnectedAccountsProps) => {
   const accounts = getStoredAccounts();
-  const context = getStoredContext();
+  const context = getStoredContext(accounts);
 
   if (accounts.length === 0 || !context) {
     return (
@@ -69,8 +104,6 @@ const RecoverConnectedAccounts = ({ message }: RecoverConnectedAccountsProps) =>
   return (
     <ConnectedAccounts
       accounts={accounts}
-      accessToken={context.accessToken}
-      expiresIn={context.expiresIn}
       initialError={message}
     />
   );

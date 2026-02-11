@@ -10,7 +10,7 @@
   transition: 0.36s var(--ease-out-cubic);
 
   &:hover {
-    --card-content-transform: translateX(0);
+    --card-content-transform: scale(1);
     --card-content-opacity: 1;
 
     transform: scale(1.015);
