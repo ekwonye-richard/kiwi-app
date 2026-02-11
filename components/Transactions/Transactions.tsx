@@ -4,6 +4,7 @@ import DayTransactions from "../DayTransactions";
 import { type TransactionItem } from "../Transaction";
 import styles from "./Transactions.module.css";
 import MonthRangeSelect, { type MonthOption } from "../MonthRangeSelect";
+import FooterAccountLogos from "../FooterAccountLogos";
 
 type TransactionsProps = {
   accounts: DashboardAccountData[];
@@ -365,16 +366,23 @@ const Transactions = ({ accounts, dateRange }: TransactionsProps) => {
       {groups.length === 0 ? (
         <p className={styles.empty}>No transactions for this period.</p>
       ) : (
-        <div className={styles.groups}>
-          {groups.map((group, index) => (
-            <DayTransactions
-              key={group.key}
-              label={group.label}
-              items={group.items}
-              isLastGroup={index === groups.length - 1}
+        <>
+          <div className={styles.groups}>
+            {groups.map((group, index) => (
+              <DayTransactions
+                key={group.key}
+                label={group.label}
+                items={group.items}
+                isLastGroup={index === groups.length - 1}
+              />
+            ))}
+          </div>
+          {groups.length >= 8 && (
+            <FooterAccountLogos
+              providers={accounts.map((item) => item.account.provider)}
             />
-          ))}
-        </div>
+          )}
+        </>
       )}
     </section>
   );

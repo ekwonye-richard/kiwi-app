@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Rajdhani } from "next/font/google";
+import "normalize.css";
 import "./global.css";
 
 const geistSans = Geist({

@@ -6,6 +6,7 @@ import { type TrueLayerProvider } from "@/services";
 import { BarclaysLogo, WiseLogo } from "@/vectors";
 import classNames from "classnames";
 import styles from "./AccountLogo.module.css";
+import type { CSSProperties } from "react";
 
 function getProviderKey(provider?: TrueLayerProvider | null | string) {
   if (!provider) {
@@ -39,12 +40,14 @@ type AccountLogoProps = {
   provider?: TrueLayerProvider | null;
   className?: string;
   size?: "small" | "medium" | "large";
+  style?: CSSProperties;
 };
 
 const AccountLogo = ({
   provider,
   className,
   size = "medium",
+  style,
 }: AccountLogoProps) => {
   const [hasLogoError, setHasLogoError] = useState(false);
   const providerName = provider?.display_name ?? "Provider";
@@ -58,6 +61,7 @@ const AccountLogo = ({
       className={classNames(styles.logoRoot, className, styles[size])}
       title={providerName}
       aria-label={providerName}
+      style={style}
     >
       {providerLogoAsset && (
         <span className={styles.logoAsset} aria-hidden="true">

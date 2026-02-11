@@ -1,0 +1,83 @@
+.footerAccountLogos {
+  margin: 40px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.items {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-bottom: 1px solid var(--light-grey-alt);
+  padding: 40px 0 8px;
+  opacity: 0.8;
+  overflow: hidden;
+}
+
+.isVisible {
+  --items-y: 0px;
+
+  &:hover {
+    --delay: 0s;
+  }
+}
+
+.logoItem {
+  --spring-easing: linear(
+    0,
+    0.0025,
+    0.0097 0.74%,
+    0.0411,
+    0.091 2.37%,
+    0.1628 3.26%,
+    0.328 4.89%,
+    0.8285 9.26%,
+    0.96 10.59%,
+    1.0594 11.78%,
+    1.1447 13.04%,
+    1.2049 14.22%,
+    1.2277 14.82%,
+    1.2477 15.48%,
+    1.2607 16.08%,
+    1.2703 16.74%,
+    1.2749 17.48%,
+    1.2733 18.3%,
+    1.2647,
+    1.25,
+    1.2302 20.97%,
+    1.2044 21.93%,
+    1.0579 26.6%,
+    1.0223 27.85%,
+    0.9949 28.97%,
+    0.9677,
+    0.9472,
+    0.9335,
+    0.9261 34.3%,
+    0.9247 35.93%,
+    0.9313 37.78%,
+    0.9444 39.71%,
+    0.9841 44.3%,
+    1.001 46.6%,
+    1.014,
+    1.0201 51.78%,
+    1.0207 53.56%,
+    1.0189 55.49%,
+    1 64.15%,
+    0.9946 69.04%,
+    0.9948 73.12%,
+    1.0014 85.94%,
+    0.9999 99.94%
+  );
+  --spring-duration: 0.9546s;
+
+  transform: translateY(var(--items-y, 40px)) scale(1);
+  transition: var(--spring-duration) var(--spring-easing)
+    var(--delay, var(--logo-delay));
+  will-change: transform;
+
+  &:hover {
+    transform: translateY(0px) scale(0.82);
+  }
+}
