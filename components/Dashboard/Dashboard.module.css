@@ -1,0 +1,88 @@
+.dashboard {
+  width: 800px;
+  max-width: 100%;
+  margin: auto;
+  min-height: 100vh;
+  padding: 20px 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 12px;
+  margin-bottom: 40px;
+}
+
+.kiwiLogo {
+  svg {
+    height: 48px;
+    width: auto;
+  }
+}
+
+.headerActions {
+  display: flex;
+  column-gap: 12px;
+}
+
+.dateRangeLabel {
+  font-size: 20px;
+  font-weight: 450;
+  color: var(--grey);
+  margin-bottom: 20px;
+}
+
+.accountsPrimaryData {
+  min-height: 480px;
+  display: grid;
+  gap: 28px;
+  grid-template-areas:
+    "card-totalBalance card-totalIncome"
+    "card-totalBalance card-expenses";
+}
+
+.cardTotalBalance {
+  grid-area: card-totalBalance;
+}
+
+.cardTotalIncome {
+  grid-area: card-totalIncome;
+  /* --state-outline-color: var(--light-green);
+  --state-text-color: var(--green); */
+}
+
+.cardExpenses {
+  grid-area: card-expenses;
+  /* --state-outline-color: var(--light-red);
+  --state-text-color: var(--red); */
+}
+
+.amountDivider {
+  display: inline-block;
+  font-size: 28px;
+  color: var(--light-grey);
+  transform: translateY(-0.05em);
+  margin-right: 0.2em;
+}
+
+.amountLarge {
+  font-size: 54px;
+  font-weight: 600;
+  font-family: var(--font-rajdhani), system-ui, sans-serif;
+  line-height: 1;
+}
+
+.amountMedium {
+  font-size: 42px;
+  font-weight: 600;
+  font-family: var(--font-rajdhani), system-ui, sans-serif;
+  line-height: 1;
+}
+
+.amountRegular {
+  font-size: 32px;
+  font-weight: 600;
+  font-family: var(--font-rajdhani), system-ui, sans-serif;
+  line-height: 1;
+}

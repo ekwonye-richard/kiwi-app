@@ -1,0 +1,67 @@
+.accountLogosList {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  transition: 0.4s var(--ease-out-cubic);
+  opacity: calc(var(--card-content-opacity, 0.8) - 0.2);
+}
+
+.logoItem {
+  will-change: transform;
+  transition: 0.4s var(--ease-out-cubic);
+
+  &:nth-child(2) {
+    transform: var(--card-content-transform, translateX(-18px) rotate(-10deg));
+  }
+  &:nth-child(3) {
+    transform: var(--card-content-transform, translateX(-34px) rotate(-12deg));
+  }
+  &:nth-child(4) {
+    transform: var(--card-content-transform, translateX(-46px) rotate(-14deg));
+  }
+  &:nth-child(5) {
+    transform: var(--card-content-transform, translateX(-56px) rotate(-16deg));
+  }
+  &:nth-child(6) {
+    transform: var(--card-content-transform, translateX(-66px) rotate(-18deg));
+  }
+}
+
+.logo,
+.logoAsset,
+.logoFallback {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background-color: var(--light-grey-alt);
+  color: var(--grey);
+  filter: grayscale(1);
+
+  img {
+    width: 18px;
+    height: 18px;
+    object-fit: cover;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.logoFallback {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--black);
+  background-color: var(--light-grey);
+}
+
+.extraCount {
+  border: 1px solid var(--light-grey);
+  color: var(--grey);
+  font-size: 12px;
+  font-weight: 600;
+}
