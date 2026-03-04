@@ -1,5 +1,5 @@
-.group {
-  margin-bottom: 24px;
+.destinations {
+  margin-bottom: 80px;
 }
 
 .heading {
@@ -15,5 +15,15 @@
   border: 1px solid var(--light-grey-alt);
   border-radius: 14px;
   padding-inline: 16px;
-  margin-bottom: 80px;
+}
+
+.toggleButton {
+  margin-top: 10px;
+  border: none;
+  background: transparent;
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
 }

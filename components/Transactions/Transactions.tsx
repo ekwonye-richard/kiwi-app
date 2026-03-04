@@ -165,7 +165,6 @@ function buildDestinationItems(items: TransactionItem[]): DestinationItem[] {
 
   return Array.from(totalsByDescription.values())
     .sort((left, right) => left.total - right.total)
-    .slice(0, 10)
     .map((item, index) => ({
       id: `${item.description}-${item.currency}-${index}`,
       description: item.description,
