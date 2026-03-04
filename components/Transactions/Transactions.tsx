@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import type { DashboardAccountData, DashboardDateRange } from "../Dashboard";
 import DayTransactions from "../DayTransactions";
 import { type TransactionItem } from "../Transaction";
@@ -12,6 +12,7 @@ type TransactionsProps = {
   showTransactionTime?: boolean;
   showAccountSelect?: boolean;
   showTotalSuffix?: boolean;
+  customFilter?: ReactNode;
 };
 
 type DayGroup = {
@@ -196,6 +197,7 @@ const Transactions = ({
   showTransactionTime = true,
   showAccountSelect = true,
   showTotalSuffix = true,
+  customFilter,
 }: TransactionsProps) => {
   const defaultRange = useMemo(
     () => getDefaultRange(accounts, dateRange),
@@ -337,6 +339,9 @@ const Transactions = ({
             }}
           />
         </div>
+
+        {customFilter}
+
         <div className={styles.totalsRow}>
           <div className={styles.totalItem}>
             <span className={styles.totalLabel}>

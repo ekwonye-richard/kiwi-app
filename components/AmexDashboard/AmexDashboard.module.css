@@ -9,3 +9,62 @@
 .transactionsSection {
   margin-top: 16px;
 }
+
+.repaymentSwitchField {
+  margin-top: 10px;
+  display: inline-flex;
+  column-gap: 10px;
+  align-items: center;
+  user-select: none;
+  cursor: pointer;
+}
+
+.repaymentSwitchText {
+  font-size: 14px;
+}
+
+.repaymentSwitchControl {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.repaymentSwitchInput {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.repaymentSwitchTrack {
+  width: 34px;
+  height: 18px;
+  border-radius: 999px;
+  background-color: var(--light-grey);
+  transition: background-color 0.15s ease-in-out;
+  padding: 1px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.repaymentSwitchThumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background-color: var(--white);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+  transition: transform 0.15s ease-in-out;
+}
+
+.repaymentSwitchInput:checked + .repaymentSwitchTrack {
+  background-color: var(--blue);
+}
+
+.repaymentSwitchInput:checked + .repaymentSwitchTrack .repaymentSwitchThumb {
+  transform: translateX(18px);
+}
+
+.repaymentSwitchInput:focus-visible + .repaymentSwitchTrack {
+  outline: 2px solid var(--light-blue);
+  outline-offset: 2px;
+}
