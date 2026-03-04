@@ -1,0 +1,11 @@
+.dashboard {
+  width: 800px;
+  max-width: 100%;
+  margin: auto;
+  min-height: 100vh;
+  padding: 20px 16px;
+}
+
+.transactionsSection {
+  margin-top: 16px;
+}

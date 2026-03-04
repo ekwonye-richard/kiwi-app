@@ -4,10 +4,9 @@ import {
   type TrueLayerTransaction,
 } from "@/services";
 import styles from "./Dashboard.module.css";
-import { KiwiLogo } from "@/vectors/KiwiLogo";
 import Card from "../Card";
 import classNames from "classnames";
-import Button from "../Button";
+import DashboardHeader from "../DashboardHeader";
 import AccountLogosList from "../AccountLogoList";
 import Transactions from "../Transactions";
 
@@ -79,29 +78,6 @@ const Dashboard = ({ accounts, dateRange }: DashboardProps) => {
         )}`
       : null;
 
-  const handleExportData = () => {
-    const exportData: DashboardExportData = {
-      accounts,
-      dateRange: dateRange ?? null,
-    };
-    const data = JSON.stringify(exportData, null, 2);
-    const blob = new Blob([data], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = `kiwi-data-${new Date().toISOString().slice(0, 10)}.json`;
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-    URL.revokeObjectURL(url);
-  };
-
-  const handleLogout = () => {
-    sessionStorage.clear();
-    window.location.href = "/";
-  };
-
   const balanceAccounts = accounts.filter((accountData) => {
     return getBalanceValue(accountData) > 0;
   });
@@ -172,17 +148,7 @@ const Dashboard = ({ accounts, dateRange }: DashboardProps) => {
 
   return (
     <main className={styles.dashboard}>
-      <header className={styles.header}>
-        <span className={styles.kiwiLogo}>
-          <KiwiLogo />
-        </span>
-        <div className={styles.headerActions}>
-          <Button onClick={handleExportData}>Export data</Button>
-          <Button variant="secondary" onClick={handleLogout}>
-            Logout
-          </Button>
-        </div>
-      </header>
+      <DashboardHeader accounts={accounts} dateRange={dateRange} />
 
       {dateRangeLabel ? (
         <div className={styles.dateRangeLabel}>{dateRangeLabel}</div>

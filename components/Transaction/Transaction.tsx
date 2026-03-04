@@ -19,6 +19,7 @@ export type TransactionItem = {
 type TransactionProps = {
   item: TransactionItem;
   isLastGroup?: boolean;
+  showTransactionTime?: boolean;
 };
 
 function formatAmount(amount: number, currency: string) {
@@ -37,7 +38,11 @@ function formatTime(timestamp: string) {
   });
 }
 
-const Transaction = ({ item, isLastGroup }: TransactionProps) => {
+const Transaction = ({
+  item,
+  isLastGroup,
+  showTransactionTime = true,
+}: TransactionProps) => {
   const isCredit = item.amount > 0;
   const accountNumberLabel =
     item.accountNumber.number ||
@@ -58,8 +63,12 @@ const Transaction = ({ item, isLastGroup }: TransactionProps) => {
             <AccountLogo provider={item.provider} size="small" />
             <span>{accountNumberLabel}</span>
           </span>
-          <span>·</span>
-          <span>{formatTime(item.timestamp)}</span>
+          {showTransactionTime && (
+            <>
+              <span>·</span>
+              <span>{formatTime(item.timestamp)}</span>
+            </>
+          )}
         </div>
       </div>
       <div className={isCredit ? styles.credit : styles.debit}>

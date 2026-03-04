@@ -1,0 +1,29 @@
+.container {
+  margin: auto;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  display: grid;
+  row-gap: 30px;
+  justify-items: center;
+}
+
+.kiwiLogo {
+  svg {
+    height: 60px;
+    width: auto;
+  }
+}
+
+.dataActions {
+  display: grid;
+  row-gap: 16px;
+}
+
+.importInput {
+  display: none;
+}

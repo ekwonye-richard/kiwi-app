@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { type TrueLayerProvider } from "@/services";
-import { BarclaysLogo, WiseLogo } from "@/vectors";
+import { AmexLogo, BarclaysLogo, WiseLogo } from "@/vectors";
 import classNames from "classnames";
 import styles from "./AccountLogo.module.css";
 import type { CSSProperties } from "react";
@@ -31,6 +31,10 @@ export function resolveProviderLogoAsset(
 
   if (providerKey.includes("wise") || providerKey.includes("transferwise")) {
     return <WiseLogo />;
+  }
+
+  if (providerKey.includes("american express")) {
+    return <AmexLogo />;
   }
 
   return null;

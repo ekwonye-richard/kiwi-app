@@ -9,6 +9,9 @@ import FooterAccountLogos from "../FooterAccountLogos";
 type TransactionsProps = {
   accounts: DashboardAccountData[];
   dateRange?: DashboardDateRange | null;
+  showTransactionTime?: boolean;
+  showAccountSelect?: boolean;
+  showTotalSuffix?: boolean;
 };
 
 type DayGroup = {
@@ -187,7 +190,13 @@ function getAccountLabel(account: DashboardAccountData["account"]) {
   return `${account.display_name} (${accountNumber})`;
 }
 
-const Transactions = ({ accounts, dateRange }: TransactionsProps) => {
+const Transactions = ({
+  accounts,
+  dateRange,
+  showTransactionTime = true,
+  showAccountSelect = true,
+  showTotalSuffix = true,
+}: TransactionsProps) => {
   const defaultRange = useMemo(
     () => getDefaultRange(accounts, dateRange),
     [accounts, dateRange],
@@ -297,21 +306,23 @@ const Transactions = ({ accounts, dateRange }: TransactionsProps) => {
               className={styles.searchInput}
               placeholder="Search"
             />
-            <label className={styles.accountField}>
-              <span className={styles.accountLabelText}>Accounts</span>
-              <select
-                value={selectedAccountId}
-                onChange={(event) => setSelectedAccountId(event.target.value)}
-                className={styles.accountSelect}
-              >
-                <option value="*">All</option>
-                {accountOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            {showAccountSelect && (
+              <label className={styles.accountField}>
+                <span className={styles.accountLabelText}>Accounts</span>
+                <select
+                  value={selectedAccountId}
+                  onChange={(event) => setSelectedAccountId(event.target.value)}
+                  className={styles.accountSelect}
+                >
+                  <option value="*">All</option>
+                  {accountOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
           </div>
           <MonthRangeSelect
             fromMonth={fromMonth}
@@ -329,7 +340,7 @@ const Transactions = ({ accounts, dateRange }: TransactionsProps) => {
         <div className={styles.totalsRow}>
           <div className={styles.totalItem}>
             <span className={styles.totalLabel}>
-              Total Income (all accounts)
+              Total Income {showTotalSuffix && "(all accounts)"}
             </span>
             <span className={styles.totalValue}>
               {totalsByCurrency.length === 0
@@ -346,7 +357,7 @@ const Transactions = ({ accounts, dateRange }: TransactionsProps) => {
           </div>
           <div className={styles.totalItem}>
             <span className={styles.totalLabel}>
-              Total Expenses (all accounts)
+              Total Expenses {showTotalSuffix && "(all accounts)"}
             </span>
             <span className={styles.totalValue}>
               {totalsByCurrency.length === 0
@@ -374,6 +385,7 @@ const Transactions = ({ accounts, dateRange }: TransactionsProps) => {
                 label={group.label}
                 items={group.items}
                 isLastGroup={index === groups.length - 1}
+                showTransactionTime={showTransactionTime}
               />
             ))}
           </div>
