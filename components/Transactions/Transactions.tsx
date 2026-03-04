@@ -5,6 +5,8 @@ import { type TransactionItem } from "../Transaction";
 import styles from "./Transactions.module.css";
 import MonthRangeSelect, { type MonthOption } from "../MonthRangeSelect";
 import FooterAccountLogos from "../FooterAccountLogos";
+import Destinations from "../Destinations";
+import type { DestinationItem } from "../Destination";
 
 type TransactionsProps = {
   accounts: DashboardAccountData[];
@@ -139,6 +141,37 @@ function buildDayGroups({ items }: { items: TransactionItem[] }): DayGroup[] {
     label: formatGroupLabel(key),
     items: dayItems,
   }));
+}
+
+function buildDestinationItems(items: TransactionItem[]): DestinationItem[] {
+  const totalsByDescription = new Map<
+    string,
+    { description: string; total: number; currency: string }
+  >();
+
+  items.forEach((item) => {
+    const description = item.description?.trim() || "Unknown destination";
+    const currency = item.currency;
+    const key = `${description}::${currency}`;
+    const current = totalsByDescription.get(key) ?? {
+      description,
+      total: 0,
+      currency,
+    };
+
+    current.total += item.amount;
+    totalsByDescription.set(key, current);
+  });
+
+  return Array.from(totalsByDescription.values())
+    .sort((left, right) => left.total - right.total)
+    .slice(0, 10)
+    .map((item, index) => ({
+      id: `${item.description}-${item.currency}-${index}`,
+      description: item.description,
+      total: item.total,
+      currency: item.currency,
+    }));
 }
 
 function buildFilteredTransactions({
@@ -283,6 +316,10 @@ const Transactions = ({
       }),
     [filteredItems],
   );
+  const destinations = useMemo(
+    () => buildDestinationItems(filteredItems),
+    [filteredItems],
+  );
   const totalsByCurrency = useMemo(() => {
     const totals = new Map<string, { income: number; expenses: number }>();
 
@@ -387,6 +424,7 @@ const Transactions = ({
         <p className={styles.empty}>No transactions for this period.</p>
       ) : (
         <>
+          <Destinations items={destinations} warningFlagAmount={-5000} />
           <div className={styles.groups}>
             {groups.map((group, index) => (
               <DayTransactions
