@@ -186,7 +186,7 @@ function parseAmexCsv(rawCsv: string): {
         timestamp: date.toISOString(),
         description: descriptionValue || "Amex transaction",
         amount: normalizedAmount,
-        currency: currencyValue || "USD",
+        currency: currencyValue || "GBP",
       };
     })
     .filter((transaction): transaction is NonNullable<typeof transaction> => {
@@ -203,7 +203,7 @@ function parseAmexCsv(rawCsv: string): {
     );
   });
 
-  const currency = transactions[0].currency || "USD";
+  const currency = transactions[0].currency || "GBP";
   const balance = transactions.reduce(
     (total, transaction) => total + transaction.amount,
     0,

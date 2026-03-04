@@ -30,6 +30,8 @@ export type DashboardExportData = {
 type DashboardProps = {
   accounts: DashboardAccountData[];
   dateRange?: DashboardDateRange | null;
+  totalIncomeLabel?: string;
+  totalExpensesLabel?: string;
 };
 
 function formatCurrency(amount: number, currency: string): string {
@@ -50,7 +52,12 @@ function getPositiveTotalsByCurrency(
   return Array.from(entries.entries()).filter(([, amount]) => amount > 0);
 }
 
-const Dashboard = ({ accounts, dateRange }: DashboardProps) => {
+const Dashboard = ({
+  accounts,
+  dateRange,
+  totalIncomeLabel = "Total Income",
+  totalExpensesLabel = "Total Expenses",
+}: DashboardProps) => {
   const formatMonthLabel = (monthValue: string) => {
     const [year, month] = monthValue.split("-");
     const yearNumber = Number(year);
@@ -194,7 +201,7 @@ const Dashboard = ({ accounts, dateRange }: DashboardProps) => {
         </Card>
         <Card
           className={styles.cardTotalIncome}
-          title="Total Income"
+          title={totalIncomeLabel}
           footer={
             <AccountLogosList
               providers={incomeAccounts.map(
@@ -233,7 +240,7 @@ const Dashboard = ({ accounts, dateRange }: DashboardProps) => {
           </small>
         </Card>
         <Card
-          title="Total Expenses"
+          title={totalExpensesLabel}
           className={styles.cardExpenses}
           footer={
             <AccountLogosList

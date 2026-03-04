@@ -44,6 +44,7 @@ const AmexDashboard = ({ accounts, dateRange }: AmexDashboardProps) => {
           showTransactionTime={false}
           showAccountSelect={false}
           showTotalSuffix={false}
+          totalIncomeLabel="Total Refunds"
           customFilter={
             <label className={styles.repaymentSwitchField}>
               <span className={styles.repaymentSwitchText}>

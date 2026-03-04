@@ -13,6 +13,8 @@ type TransactionsProps = {
   showAccountSelect?: boolean;
   showTotalSuffix?: boolean;
   customFilter?: ReactNode;
+  totalIncomeLabel?: string;
+  totalExpensesLabel?: string;
 };
 
 type DayGroup = {
@@ -198,6 +200,8 @@ const Transactions = ({
   showAccountSelect = true,
   showTotalSuffix = true,
   customFilter,
+  totalIncomeLabel = "Total Income",
+  totalExpensesLabel = "Total Expenses",
 }: TransactionsProps) => {
   const defaultRange = useMemo(
     () => getDefaultRange(accounts, dateRange),
@@ -345,7 +349,7 @@ const Transactions = ({
         <div className={styles.totalsRow}>
           <div className={styles.totalItem}>
             <span className={styles.totalLabel}>
-              Total Income {showTotalSuffix && "(all accounts)"}
+              {totalIncomeLabel} {showTotalSuffix && "(all accounts)"}
             </span>
             <span className={styles.totalValue}>
               {totalsByCurrency.length === 0
@@ -362,7 +366,7 @@ const Transactions = ({
           </div>
           <div className={styles.totalItem}>
             <span className={styles.totalLabel}>
-              Total Expenses {showTotalSuffix && "(all accounts)"}
+              {totalExpensesLabel} {showTotalSuffix && "(all accounts)"}
             </span>
             <span className={styles.totalValue}>
               {totalsByCurrency.length === 0
